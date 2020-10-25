@@ -20,11 +20,6 @@ class CovidLine:
     self.exposure_end = exposure_end
     self.source = source
     self.link = link
-    
-class CovidLine:
-  def __init__(self, ch, case_in_country):
-    self.ch = ch
-    self.case_in_country = case_in_country
 
 class CovidLineElement:
   def __init__(self, dadoCovid):
