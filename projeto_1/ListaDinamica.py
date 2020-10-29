@@ -1,30 +1,6 @@
 import random
 import pandas as pd
 
-'''class CovidLine:
-  #essa é a classe que armazena todos os dados
-  def __init__(self, ch, case_in_country, age, if_onset_approximated, visiting_Wuhan, from_Wuhan, death, recovered, symptom, reporting_date, summary, location, country, gender, symptom_onset, hosp_visit_date, exposure_start, exposure_end, source, link):
-    self.ch = ch
-    self.case_in_country = case_in_country
-    self.age = age
-    self.if_onset_approximated = if_onset_approximated
-    self.visiting_Wuhan = visiting_Wuhan
-    self.from_Wuhan = from_Wuhan
-    self.death = death
-    self.recovered = recovered
-    self.symptom = symptom
-    self.reporting_date = reporting_date
-    self.summary = summary
-    self.location =location
-    self.country = country
-    self.gender = gender
-    self.symptom_onset = symptom_onset
-    self.hosp_visit_date = hosp_visit_date
-    self.exposure_start = exposure_start
-    self.exposure_end = exposure_end
-    self.source = source
-    self.link = link
-'''
 class CovidLine:
   def __init__(self, ch, observation_date, province_state, country_region, last_update, confirmed, deaths, recovered):    
     self.ch = ch
@@ -37,13 +13,13 @@ class CovidLine:
     self.recovered = recovered
 
 class CovidLineElement:
-  #dadoCovid é o CovidLine, ou seja, a struct
+  #inicia uma celula
   def __init__(self, CovidLine):
     self.CovidLine = CovidLine
     self.next = None
 
 class CoviList:
-  #inicia a lista/celula
+  #inicia a lista
   def __init__(self):
     self.head = CovidLineElement(None)
     self.head.next = self.head
@@ -105,7 +81,6 @@ class CoviList:
     return True
 
   def apagaLista(self):
-
     aux = self.head.next
 
     #ele cria uma variavel temporaria, pegando a variavel que vai ser apagada
@@ -121,19 +96,25 @@ class CoviList:
   def escrever(self, outf):
     aux = self.head.next
 
+    #ele passa por cada celula da lista, escrevendo no arquivo o seu conteúdo
     while(aux != self.head):
       outf.write("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7}\n".format(aux.CovidLine.ch, aux.CovidLine.observation_date, aux.CovidLine.province_state, aux.CovidLine.country_region, aux.CovidLine.last_update, aux.CovidLine.confirmed, aux.CovidLine.deaths, aux.CovidLine.recovered))
       aux = aux.next
 
 if __name__ == "__main__":
+  #incia a lista
   lista1 = CoviList()
 
+  #lê o arquivo que contem os dados e coloca numa variavel
   data = pd.read_csv("./covid_19_data.csv")
 
+  #cria um array com 11000 numeros, os misturando depois
   aux = list(range(11000))
   random.shuffle(aux)  
   x = 0
 
+  #faz o processo de criar uma nova struct, armazena dentro dela os dados de uma certa linha aleatória
+  #de acordo com o array de numeros e os insere na lista, isso 100 vezes
   while (x < 100):
     dado = CovidLine(*data.loc[aux[x]])
 
@@ -141,6 +122,7 @@ if __name__ == "__main__":
 
     x += 1
   
+  #no final, ele pergunta o usuario se deseja imprimir no terminal ou exportar para um arquivo de texto
   dig = int(input("Digite 1 para visualizar no terminal ou 2 para exportar para um arquivo de texto: "))
 
   while(dig != 1 and dig != 2):
