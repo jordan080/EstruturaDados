@@ -1,30 +1,6 @@
 import random
 import pandas as pd
 
-'''class CovidLine:
-  #essa é a classe que armazena todos os dados
-  def __init__(self, ch, case_in_country, age, if_onset_approximated, visiting_Wuhan, from_Wuhan, death, recovered, symptom, reporting_date, summary, location, country, gender, symptom_onset, hosp_visit_date, exposure_start, exposure_end, source, link):
-    self.ch = ch
-    self.case_in_country = case_in_country
-    self.age = age
-    self.if_onset_approximated = if_onset_approximated
-    self.visiting_Wuhan = visiting_Wuhan
-    self.from_Wuhan = from_Wuhan
-    self.death = death
-    self.recovered = recovered
-    self.symptom = symptom
-    self.reporting_date = reporting_date
-    self.summary = summary
-    self.location =location
-    self.country = country
-    self.gender = gender
-    self.symptom_onset = symptom_onset
-    self.hosp_visit_date = hosp_visit_date
-    self.exposure_start = exposure_start
-    self.exposure_end = exposure_end
-    self.source = source
-    self.link = link
-'''
 class CovidLine:
   #elemento que armazena os dados da celula
   def __init__(self, ch, observation_date, province_state, country_region, last_update, confirmed, deaths, recovered):    
