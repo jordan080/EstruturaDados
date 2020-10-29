@@ -1,7 +1,5 @@
-import os
 import random
 import pandas as pd
-import sys
 
 '''class CovidLine:
   #essa é a classe que armazena todos os dados
@@ -130,10 +128,7 @@ class CoviList:
 if __name__ == "__main__":
   lista1 = CoviList()
 
-  os.chdir(os.path.dirname(os.path.abspath(__file__)))
-  cwd = os.getcwd()
-
-  data = pd.read_csv(cwd+"/covid_19_data.csv")
+  data = pd.read_csv("./covid_19_data.csv")
 
   aux = list(range(11000))
   random.shuffle(aux)  
@@ -155,7 +150,7 @@ if __name__ == "__main__":
     lista1.visualizar()
 
   elif dig == 2:   
-    outf = open(cwd+"/saida.txt", "w")
+    outf = open("saida_lista.txt", "w")
     lista1.escrever(outf)
 
   

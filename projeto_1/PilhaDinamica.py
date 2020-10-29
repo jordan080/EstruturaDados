@@ -106,7 +106,7 @@ if __name__ == "__main__":
     lista1.visualizar()
 
   elif dig == 2:   
-    outf = open("saida.txt", "w")
+    outf = open("saida_pilha.txt", "w")
     lista1.escrever(outf)
 
 
