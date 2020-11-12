@@ -63,7 +63,7 @@ while(opt != 5):
     # de acordo com o array de numeros e os insere na lista, isso 100 vezes
     if opt == 1 or opt == 2:
         print("\033[1;33mEstrutura lida com sucesso!\033[0m")
-        while (x < 10):
+        while (x < 100):
             dado = Struct.CovidLine(*data.loc[aux[x]])
 
             estrutura.inserir(dado)
@@ -88,6 +88,14 @@ Opção:\033[m '''))
             estrutura.escrever(outf)
 
     elif opt == 3:
+        while (x < 100):
+            dado = Struct.CovidLine(*data.loc[aux[x]])
+
+            estrutura.inserir(dado)
+
+            x += 1
+
+        print("\033[1;33mEstrutura lida com sucesso!\033[0m")
         dig = int(input('''\033[1;37mEscolha uma opção:
     1-Visualizar no terminal
     2-Exportar para um arquivo de texto 
@@ -104,30 +112,35 @@ Opção:\033[m '''))
     4-Ler novos dados
     5-Sair do programa
 Opção:\033[m '''))
-        while opt == 3:
-            if dig == 1:
-                print("\033[1;34m")  
+        while dig != 4:
+            if dig == 1:  
+                #print("\033[1;35m")  
                 estrutura.visualizar()
-                print("\033[m") 
-            elif dig == 2:
-                estrutura.escrever()
+                #print("\033[m") 
+                #print("passou dig 1")
+
+            elif dig == 2:   
+                outf = open("saida.txt", "w")
+                estrutura.escrever(outf)
+                #print("passou dig 2")
+
             elif dig == 3:
                 print("em construção")
+
             elif dig == 5:
                 opt = 5
                 break
-            else:
-                break
-            dig = int(input('''\033[1;37mEscolha uma opção:
+
+            dig = int(input('''\033[1;37mEscolha uma nova opção:
     1-Visualizar no terminal
     2-Exportar para um arquivo de texto 
     3-Excluir um valor da fila
     4-Ler novos dados
     5-Sair do programa
 Opção:\033[m '''))
-        while(dig not in range(1, 6)):
-            print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-            dig = int(input('''\033[1;37mEscolha uma opção:
+            while(dig not in range(1, 6)):
+                print("\033[1;31mOPÇÃO INVALIDA\033[0m")
+                dig = int(input('''\033[1;37mEscolha uma opção:
     1-Visualizar no terminal
     2-Exportar para um arquivo de texto 
     3-Excluir um valor da fila
