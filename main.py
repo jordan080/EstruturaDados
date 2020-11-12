@@ -72,7 +72,6 @@ while(opt != 5):
         
         dig = int(input('''\033[1;37mDigite 1 para visualizar no terminal ou 2 para exportar para um arquivo de texto 
 Opção:\033[m '''))
-
         while(dig != 1 and dig != 2):
             print("\033[1;31mOPÇÃO INVALIDA\033[0m")
             dig = int(input('''\033[1;37mDigite 1 para visualizar no terminal ou 2 para exportar para um arquivo de texto 
@@ -114,18 +113,18 @@ Opção:\033[m '''))
 Opção:\033[m '''))
         while dig != 4:
             if dig == 1:  
-                #print("\033[1;35m")  
+                print("\033[1;35m")  
                 estrutura.visualizar()
-                #print("\033[m") 
-                #print("passou dig 1")
+                print("\033[m") 
 
             elif dig == 2:   
                 outf = open("saida.txt", "w")
                 estrutura.escrever(outf)
-                #print("passou dig 2")
+                print("passou dig 2")
 
             elif dig == 3:
-                print("em construção")
+                estrutura.excluir()
+                print("\033[1;33mO primeiro valor da fila foi apagado! Visualize a fila para conferir!\033[0m")
 
             elif dig == 5:
                 opt = 5
@@ -197,6 +196,7 @@ Opção:\033[m '''))
                 estrutura2.escrever(outf)
                 outf = open("saida3.txt", "w")
                 estrutura3.escrever(outf)
+                print("\033[1;33mAs arvores foram escritas com sucesso! Procure-as na raiz do documento!\033[0m")
 
             elif dig == 3:
                 escolha = int(input('''\033[1;37mEscolha a arvore que terá o valor excluido
