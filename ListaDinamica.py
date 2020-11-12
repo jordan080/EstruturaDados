@@ -1,7 +1,3 @@
-import Struct as CovidLine
-import random
-import pandas as pd
-
 class CovidLineElement:
   #inicia uma celula
   def __init__(self, CovidLine):

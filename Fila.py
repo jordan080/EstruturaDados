@@ -1,10 +1,7 @@
-import random
-import pandas as pd
-
 #FIFO - First in First out - FILA
 
 class CovidLineElement:
-  #dadoCovid é o CovidLine, ou seja, a struct
+  #representa uma celula da fila
   def __init__(self, CovidLine):
     self.CovidLine = CovidLine
     self.next = None
@@ -16,14 +13,15 @@ class CoviList:
     self.head = None
     self.last = None
 
-  #função de teste para visualizar a lista
   def visualizar(self):
+    #função que imprime na tela
     aux = self.head
     while(aux != None):
       print("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7}".format(aux.CovidLine.ch, aux.CovidLine.observation_date, aux.CovidLine.province_state, aux.CovidLine.country_region, aux.CovidLine.last_update, aux.CovidLine.confirmed, aux.CovidLine.deaths, aux.CovidLine.recovered))
       aux = aux.next
 
   def excluir(self):
+    #remove um item da fila, em um esquema semelhante o da lista e pilha
     if (self.head == None):
       return False
 
@@ -32,26 +30,28 @@ class CoviList:
     return elem
 
   def inserir(self, CovidLine):
-    #se não existir, cria-se um novo elemento que adiciona o dado,
-    #ele vai apontar para o próximo que era do anterior e o anterior aponta agora para o novo dado
+    #cria uma nova celula e a preenche com uma struct
     novo = CovidLineElement(CovidLine)
     novo.next = None
 
+    #se a fila estiver vazia, a cabeça aponta para essa nova celula
     if self.head is None:
       self.head = novo
-
+      
+    #se o final da fila não estiver vazio, o ultimo aponta para essa nova celula
     if (self.last != None):
       self.last.next = novo
     
+    #a nova celula passa a ser ultima, de acordo com o esquema da fila
     self.last = novo
 
   def apagarEstrutura(self):
-    #ele cria uma variavel temporaria, pegando a variavel que vai ser apagada
-    #o aux aponta para o proxima e chave é apagada
+    #função que passa por todas as celulas, as apagando
     while(self.head != None):
-      self.pop()
+      self.excluir()
 
   def escrever(self, outf):
+    #função que escreve num arquivo de saida
     aux = self.head
 
     while(aux != None):
