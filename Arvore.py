@@ -64,7 +64,6 @@ class CovidLineElement:
         pai = None
         while atual:
             if atual.chave == ch:
-                atual.ver()
                 return atual, pai
             pai = atual
             if atual.chave > ch:
