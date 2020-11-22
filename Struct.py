@@ -7,8 +7,6 @@ class CovidLine:
     self.last_update = last_update
     self.confirmed = confirmed
     self.deaths = deaths
-    self.recovered = recovered
-
 
 starwars = {
   "nodes": [
