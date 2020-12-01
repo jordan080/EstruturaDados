@@ -37,6 +37,13 @@ class CovidLineElement:
                                                                       self.covid_line.deaths,
                                                                       self.covid_line.recovered)
 
+    def auxstr(self, s):
+        if self.left:
+            self.left.auxstr(s)
+        s.append(self.__str__())
+        if self.right:
+            self.right.auxstr(s)
+
     def visualizar(self):
         #função que imprime no terminal, percorrendo nós recursivamente
         if self.left:
@@ -110,6 +117,13 @@ class CoviList:
         if not self.raiz:
             return
         self.raiz.visualizar()
+
+    def __str__(self):
+        if not self.raiz:
+            return
+        s = []
+        self.raiz.auxstr(s)
+        return s
 
     def buscar(self, ch):
         #metodo que chama a função de buscar um certo nó
