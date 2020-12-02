@@ -238,7 +238,7 @@ class janela_grafo():
 
 class janela_grafo_tel():
     def __init__(self):
-        layout = [ [sg.Listbox(estrutura.__str__(), size=(83, 20))], [sg.Button('Voltar')] ]
+        layout = [ [sg.Listbox(estrutura.__str__(), size=(180, 20))], [sg.Button('Voltar')] ]
 
         win = sg.Window('Dados', layout)
         event, value = win.read()

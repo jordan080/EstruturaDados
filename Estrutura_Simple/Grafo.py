@@ -51,18 +51,19 @@ class Grafo:
         return True
 
     def __str__(self):
-        print("Vértices: {0}, Arestas: {1}\n".format(self.total_vertices, self.arestas))
+        #print("Vértices: {0}, Arestas: {1}\n".format(self.total_vertices, self.arestas))
         i = 0
-        s = ""
+        ss = []
         for vertice in self.vertice:
-            s += vertice.nome + ": "
+            s = vertice.nome + "= "
             adj = vertice.head
             while adj:
                 s += "{0}({1:.2f}) ".format(self.vertice[adj.vertice].nome, adj.peso)
                 adj = adj.next
-            s += "\n"
+            s += "\n\n"
+            ss.append(s)
             i += 1
-        return s
+        return ss
 
     def djikstra(self, vi, vf=-1):
         d = []
