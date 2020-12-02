@@ -147,11 +147,11 @@ class CoviList:
 
         #verfica que não é a raiz e busca pela posição onde está o nó que se deseja apagar e o seu pai
         if not self.raiz:
-            return
+            return False
         no, pai = self.raiz.busca_pai(ch)
         #se o no não existe, retorna
         if not no:
-            return
+            return False
         #se o nó só tiver um filho, verifica se ele está na direita ou na esquerda e o atribui em q 
         if not no.left or not no.right:
             if not no.left:
@@ -182,6 +182,7 @@ class CoviList:
             self.raiz = q
         #o nó é apagado
         del no
+        return True
 
     def apagarEstrutura(self):
         #apaga a arvore, apagando todos os nós recursivamente e depois fazendo a raiz ter valor nulo
