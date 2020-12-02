@@ -217,15 +217,16 @@ class janela_grafo():
             janela_grafo_tel()
 
         elif(event == 'Ver a menor distancia'):
-            aux1 = sg.popup_get_text('Escolha o primeiro nó', title='Primeiro personagem')
+            aux1 = sg.popup_get_text('Digite o nome do primeiro personagem, em letras maiúsculas', title='Primeiro personagem')
             while (aux1 == None):
-                aux1 = sg.popup_get_text('Escolha o primeiro nó', title='Primeiro personagem')
+                aux1 = sg.popup_get_text('Digite o nome do primeiro personagem', title='Primeiro personagem')
 
-            aux2 = sg.popup_get_text('Escolha o segundo nó', title='Segundo personagem')
+            aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem')
             while (aux2 == None):
-                aux2 = sg.popup_get_text('Escolha o primeiro nó', title='Segundo personagem')
+                aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem')
 
-            dis = sg.popup("A distância entre " + aux1 + " e " + aux2 + " é " + str(round(estrutura.menor_dist(aux1, aux2), 2)), title='Distância')
+            dis, traj = estrutura.menor_dist(aux1, aux2)
+            pop = sg.popup("A distância entre " + aux1 + " e " + aux2 + " é " + str(round(dis, 2)), traj, title='Busca')
             win.close()
             janela_grafo()
 

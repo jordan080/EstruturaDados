@@ -125,8 +125,8 @@ class Grafo:
         print("A distância entre " + str(self.vertice[vi]) + " e " + str(self.vertice[u]) + " é " + str(d[vf]) + ":")
         s = ""
         while p[u] != -1:
-            s = " -> " + str(self.vertice[u]) + "({0:.2f})".format(d[u]) + s
+            s = " -> " + self.vertice[u].nome + "({0:.2f})".format(d[u]) + s
             u = p[u]
-        s = str(self.vertice[self.dic_vec[nome_vi]]) + s
-        print(s)
-        return d[vf]
+        s = self.vertice[self.dic_vec[nome_vi]].nome + s
+        #print(s)
+        return d[vf], s
