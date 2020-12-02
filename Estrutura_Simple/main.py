@@ -127,7 +127,7 @@ class janela_lista():
         event, value = win.read()
         if (event == 'Ver dados'):
             win.close()
-            janela1_tel()
+            janela_lista_tel()
 
         elif (event == 'Adicionar novo dado'):
             pop = sg.popup_get_text(message='Digite a chave nova do dado que vai ser adicionado:')
@@ -209,7 +209,7 @@ class janela_lista_tel():
 
         if(event=='Voltar'):
             win.close()
-            janela1()
+            janela_lista()
 
 class janela1():
     def __init__(self):
