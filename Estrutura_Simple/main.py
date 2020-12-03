@@ -171,7 +171,7 @@ class janela_lista():
                 estrutura.inserir(aux)
                 
             win.close()
-            janela1()
+            janela_lista()
 
         elif (event == 'Remover algum dado'):
             pop = sg.popup_get_text(message='Digite a chave do dado desejado:')
@@ -184,14 +184,14 @@ class janela_lista():
                 pop_done = sg.popup("Chave removida com sucesso")   
                 
             win.close()
-            janela1()
+            janela_lista()
 
         elif(event == 'Exportar para arquivo de texto'):
             outf = open("saida.txt", "w")
             estrutura.escrever(outf)
             sg.popup('Arquivo criado com sucesso!')
             win.close()
-            janela1()
+            janela_lista()
 
         elif (event == 'Voltar'):
             win.close()
