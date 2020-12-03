@@ -18,6 +18,14 @@ class CoviList:
       print("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7}".format(aux.CovidLine.ch, aux.CovidLine.observation_date, aux.CovidLine.province_state, aux.CovidLine.country_region, aux.CovidLine.last_update, aux.CovidLine.confirmed, aux.CovidLine.deaths, aux.CovidLine.recovered))
       aux = aux.next
 
+  def __str__(self):
+    aux = self.head.next
+    s = []
+    while(aux != self.head):
+      s.append("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7}\n".format(aux.CovidLine.ch, aux.CovidLine.observation_date, aux.CovidLine.province_state, aux.CovidLine.country_region, aux.CovidLine.last_update, aux.CovidLine.confirmed, aux.CovidLine.deaths, aux.CovidLine.recovered))
+      aux = aux.next
+    return s
+
   def buscar(self, ch):
     #prev recebe o atual e aux recebe o proximo
     prev = self.head

@@ -19,6 +19,14 @@ class CoviList:
       print("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7}".format(aux.CovidLine.ch, aux.CovidLine.observation_date, aux.CovidLine.province_state, aux.CovidLine.country_region, aux.CovidLine.last_update, aux.CovidLine.confirmed, aux.CovidLine.deaths, aux.CovidLine.recovered))
       aux = aux.next
 
+  def __str__(self):
+    aux = self.head
+    s = []
+    while(aux != None):
+      s.append("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7}\n".format(aux.CovidLine.ch, aux.CovidLine.observation_date, aux.CovidLine.province_state, aux.CovidLine.country_region, aux.CovidLine.last_update, aux.CovidLine.confirmed, aux.CovidLine.deaths, aux.CovidLine.recovered))
+      aux = aux.next
+    return s
+
   def excluir(self):
     #se o item atual for a cabeça, ele volta. Se não, ele simplesmente ajusta para que
     #o atual aponte para o proximo e retorna quem ele removeu
@@ -29,7 +37,7 @@ class CoviList:
     return aux
 
   def inserir(self, CovidLine):
-    #ele cria uma nova celula e o adiciona a pilha, seguindo o modelo da lista, porém, 
+    #ele cria uma nova celula e o adiciona a pilha, seguindo o modelo da lista, porém,
     #sem a necessidade de buscar se ela já existe
     novo = CovidLineElement(CovidLine)
     novo.next = self.head
@@ -48,7 +56,3 @@ class CoviList:
     while(aux != None):
       outf.write("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7}\n".format(aux.CovidLine.ch, aux.CovidLine.observation_date, aux.CovidLine.province_state, aux.CovidLine.country_region, aux.CovidLine.last_update, aux.CovidLine.confirmed, aux.CovidLine.deaths, aux.CovidLine.recovered))
       aux = aux.next
-
-
-
-

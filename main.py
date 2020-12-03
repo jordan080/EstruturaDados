@@ -1,40 +1,66 @@
+import PySimpleGUI as sg
 import Struct
 import ListaDinamica
 import Pilha
 import Fila
 import Arvore
+import Grafo
 import pandas as pd
 import random
 
-opt = int(input('''\033[1;37mEscolha uma opção para como deseja estruturar seus dados:
-    1-Lista Dinâmica
-    2-Pilha
-    3-Fila
-    4-Árvore
-    5-Sair do programa
-Opção:\033[m '''))
-while(opt not in range(1, 6)):
-    print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-    opt = int(input('''\033[1;37mEscolha uma opção para como deseja estruturar seus dados:
-    1-Lista Dinâmica
-    2-Pilha
-    3-Fila
-    4-Árvore
-    5-Sair do programa
-Opção:\033[m '''))
+estrutura = None
+estrutura2 = None
+estrutura3 = None
+data = pd.read_csv("./covid_19_data.csv", header=1, na_filter=True, na_values='nan', keep_default_na=False)
+aux = list(range(len(data)))
 
-while(opt != 5):
-    if (opt == 1):
-        estrutura = ListaDinamica.CoviList()
+class Main():
+    def __init__(self):
+        layout = [ [sg.Button('Lista'), sg.Button('Fila'), sg.Button('Pilha'), sg.Button('Árvore'), sg.Button('Grafo')],
+        [sg.Button('Fechar')] ]
 
-    elif (opt == 2):
-        estrutura = Pilha.CoviList()
+        win = sg.Window('Projeto de ED', layout)
+        event, value = win.read()
+        random.shuffle(aux)
+        global estrutura
+        global estrutura2
+        global estrutura3
 
-    elif (opt == 3):
-        estrutura = Fila.CoviList()
+        if (event == sg.WIN_CLOSED or event == 'Fechar'):
+            win.close()
 
-    elif (opt == 4):
-        print('''\033[1;37mEscolha a lista dos dados que irão ser escolhidos para cada árvore:
+        elif (event == "Lista"):
+            estrutura = ListaDinamica.CoviList()
+            x = 0
+            while (x < 100):
+                dado = Struct.CovidLine(*data.loc[aux[x]])
+                estrutura.inserir(dado)
+                x += 1
+            win.close()
+            janela_lista()
+
+        elif (event == "Fila"):
+            estrutura = Fila.CoviList()
+            x = 0
+            while (x < 100):
+                dado = Struct.CovidLine(*data.loc[aux[x]])
+                estrutura.inserir(dado)
+                x += 1
+            win.close()
+            janela1()
+
+        elif (event == "Pilha"):
+            estrutura = Pilha.CoviList()
+            x = 0
+            while (x < 100):
+                dado = Struct.CovidLine(*data.loc[aux[x]])
+                estrutura.inserir(dado)
+                x += 1
+            win.close()
+            janela1()
+
+        elif (event == "Árvore"):
+            texto = '''Escolha a lista dos dados que irão ser escolhidos para cada árvore:
 0-Somente a chave
 1-Data da observação
 2-Província (China)
@@ -42,215 +68,408 @@ while(opt != 5):
 4-Última atualização
 5-Casos Confirmados
 6-Número de mortos
-7-Número de recuperados\033[m''')
+7-Número de recuperados
+            '''
+            for i in range(3):
+                aux2 = sg.popup_get_text(message=texto, title="Digite uma chave da árvore {0}:".format(i+1))
 
-        estrutura1 = Arvore.CoviList(int(input("\033[1;37mEscolha uma opção para a primeira árvore:\033[m ")))
-        estrutura2 = Arvore.CoviList(int(input("\033[1;37mEscolha uma opção para a segunda árvore:\033[m ")))
-        estrutura3 = Arvore.CoviList(int(input("\033[1;37mEscolha uma opção para a terceira árvore:\033[m ")))
+                while (aux2 == None or aux2.isnumeric() == False or not(int(aux2) in range(8)) ):
+                    aux2 = sg.popup_get_text(message=texto, title="Digite uma chave da árvore {0}:".format(i+1))
+                
+                if (i == 0):
+                    estrutura = Arvore.CoviList(int(aux2))
+                    x = 0
+                    while (x < 100):
+                        dado = Struct.CovidLine(*data.loc[aux[x]])
+                        estrutura.inserir(dado)
+                        x += 1
+                
+                if (i == 1):
+                    estrutura2 = Arvore.CoviList(int(aux2))
+                    x = 0
+                    while (x < 100):
+                        dado = Struct.CovidLine(*data.loc[aux[x]])
+                        estrutura2.inserir(dado)
+                        x += 1
 
-    else:
-        break
+                if (i == 2):
+                    estrutura3 = Arvore.CoviList(int(aux2))
+                    x = 0
+                    while (x < 100):
+                        dado = Struct.CovidLine(*data.loc[aux[x]])
+                        estrutura3.inserir(dado)
+                        x += 1
+            win.close()
+            janela_arvore()
 
-    # lê o arquivo que contem os dados e coloca numa variavel
-    data = pd.read_csv("./covid_19_data.csv", header=1, na_filter=True, na_values='nan', keep_default_na=False)
+        elif (event == 'Grafo'):
+            estrutura = Grafo.Grafo()
 
-    # cria um array com 11000 numeros, os misturando depois
-    aux = list(range(len(data)))
-    random.shuffle(aux)  
-    x = 0
+            for node in Struct.starwars["nodes"]:
+                estrutura.add_vertice(node)
 
-    # faz o processo de criar uma nova struct, armazena dentro dela os dados de uma certa linha aleatória
-    # de acordo com o array de numeros e os insere na lista, isso 100 vezes
-    if opt == 1 or opt == 2:
-        print("\033[1;33mEstrutura lida com sucesso!\033[0m")
-        while (x < 100):
-            dado = Struct.CovidLine(*data.loc[aux[x]])
+            for link in Struct.starwars["links"]:
+                estrutura.add_aresta(link["source"], link["target"], 10.0 / link["value"])
+                estrutura.add_aresta(link["target"], link["source"], 10.0 / link["value"])
 
-            estrutura.inserir(dado)
+            win.close()
+            janela_grafo()
 
-            x += 1
-        
-        dig = int(input('''\033[1;37mDigite 1 para visualizar no terminal ou 2 para exportar para um arquivo de texto 
-Opção:\033[m '''))
-        while(dig != 1 and dig != 2):
-            print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-            dig = int(input('''\033[1;37mDigite 1 para visualizar no terminal ou 2 para exportar para um arquivo de texto 
-Opção:\033[m '''))
+class janela_lista():
+    def __init__(self):
+        layout = [ [sg.Button('Adicionar novo dado'), sg.Button('Remover algum dado')],
+                    [sg.Button('Ver dados')], 
+                    [sg.Button('Exportar para arquivo de texto')],
+                    [sg.Button('Voltar')] ]
 
-        if dig == 1:  
-            print("\033[1;35m")  
-            estrutura.visualizar()
-            print("\033[m") 
+        win = sg.Window('Opções', layout)
 
-        elif dig == 2:   
+        event, value = win.read()
+        print(event)
+        if (event == 'Ver dados'):
+            win.close()
+            janela_lista_tel()
+
+        elif (event == 'Adicionar novo dado'):
+            pop = sg.popup_get_text(message='Digite a chave nova do dado que vai ser adicionado:')
+
+            if (pop == None):
+                win.close()
+            else:
+                at, prev = estrutura.buscar(int(pop))
+                if at:
+                    pop_error = sg.popup("A chave digitada já existe")
+                else:
+                    dado = []
+                    dado.append(int(pop))
+
+                    layout = [
+                        [sg.Text('Por favor, informe aqui os dados:')],
+                        [sg.Text('Data de Observação', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Estado da Província (Se for na China)', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Região do País', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Última Atualização', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Casos confirmados', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Número de mortos', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Números de recuperados', size =(30, 1)), sg.InputText()],
+                        [sg.Submit(), sg.Cancel()]
+                    ]
+
+                    window_ins = sg.Window('Dados', layout)
+                    event,values = window_ins.read()
+                    window_ins.close()
+
+                    if (event == 'Cancel'):
+                        win.close()
+                        janela_lista()
+
+                    for i in values:
+                        dado.append(values[i])
+
+                    aux2 = Struct.CovidLine(*dado)
+
+                    for i in values:
+                        dado.append(i)
+
+                    estrutura.inserir(aux2)
+                
+            win.close()
+            janela_lista()
+
+        elif (event == 'Remover algum dado'):
+            pop = sg.popup_get_text(message='Digite a chave do dado desejado:')
+
+            if (pop == None):
+                win.close()
+            elif (estrutura.excluir(int(pop)) == False):
+                pop_error = sg.popup("A chave digitada não existe")          
+            else:
+                pop_done = sg.popup("Chave removida com sucesso")   
+                
+            win.close()
+            janela_lista()
+
+        elif(event == 'Exportar para arquivo de texto'):
             outf = open("saida.txt", "w")
             estrutura.escrever(outf)
+            sg.popup('Arquivo criado com sucesso!')
+            win.close()
+            janela_lista()
 
-    elif opt == 3:
-        while (x < 100):
-            dado = Struct.CovidLine(*data.loc[aux[x]])
+        elif (event == 'Voltar'):
+            win.close()
+            Main()
 
-            estrutura.inserir(dado)
+        elif(event == sg.WIN_CLOSED):
+            win.close()
 
-            x += 1
+class janela_lista_tel():
+    def __init__(self):
+        layout = [ [sg.Listbox(estrutura.__str__(), size=(83, 20))], [sg.Button('Voltar')] ]
 
-        print("\033[1;33mEstrutura lida com sucesso!\033[0m")
-        dig = int(input('''\033[1;37mEscolha uma opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da fila
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
-        while(dig not in range(1, 6)):
-            print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-            dig = int(input('''\033[1;37mEscolha uma opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da fila
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
-        while dig != 4:
-            if dig == 1:  
-                print("\033[1;35m")  
-                estrutura.visualizar()
-                print("\033[m") 
+        win = sg.Window('Dados', layout)
+        event, value = win.read()
 
-            elif dig == 2:   
-                outf = open("saida.txt", "w")
-                estrutura.escrever(outf)
-                print("passou dig 2")
+        if(event=='Voltar'):
+            win.close()
+            janela_lista()
 
-            elif dig == 3:
-                estrutura.excluir()
-                print("\033[1;33mO primeiro valor da fila foi apagado! Visualize a fila para conferir!\033[0m")
+class janela1():
+    def __init__(self):
+        layout = [ [sg.Button('Adicionar novo dado'), sg.Button('Remover item')],
+                    [sg.Button('Ver dados')], 
+                    [sg.Button('Exportar para arquivo de texto')],
+                    [sg.Button('Voltar')] ]
 
-            elif dig == 5:
-                opt = 5
-                break
+        win = sg.Window('Opções', layout)
 
-            dig = int(input('''\033[1;37mEscolha uma nova opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da fila
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
-            while(dig not in range(1, 6)):
-                print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-                dig = int(input('''\033[1;37mEscolha uma opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da fila
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
-###########################################################################################################
-    else:
-        print("\033[1;33mEstruturas lidas com sucesso!\033[0m")
-        while (x < 100):
-            dado = Struct.CovidLine(*data.loc[aux[x]])
+        event, value = win.read()
+        if (event == 'Ver dados'):
+            win.close()
+            janela1_tel()
 
-            estrutura1.inserir(dado)
-            estrutura2.inserir(dado)
-            estrutura3.inserir(dado)
+        elif (event == 'Adicionar novo dado'):
+            dado = []
 
-            x += 1
-            
-        arvores = [estrutura1, estrutura2, estrutura3]
+            layout = [ 
+                [sg.Text('Por favor, informe aqui os dados:')],
+                [sg.Text('Chave', size =(30, 1)), sg.InputText()],
+                [sg.Text('Data de Observação', size =(30, 1)), sg.InputText()], 
+                [sg.Text('Estado da Província (Se for na China)', size =(30, 1)), sg.InputText()], 
+                [sg.Text('Região do País', size =(30, 1)), sg.InputText()], 
+                [sg.Text('Última Atualização', size =(30, 1)), sg.InputText()], 
+                [sg.Text('Casos confirmados', size =(30, 1)), sg.InputText()], 
+                [sg.Text('Número de mortos', size =(30, 1)), sg.InputText()], 
+                [sg.Text('Números de recuperados', size =(30, 1)), sg.InputText()],
+                [sg.Submit(), sg.Cancel()]
+            ]
 
-        dig = int(input('''\033[1;37mEscolha uma opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da arvore
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
-        while(dig not in range(1, 6)):
-            print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-            dig = int(input('''\033[1;37mEscolha uma opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da arvore
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
+            window_ins = sg.Window('Dados', layout)
+            event,values = window_ins.read()
+            window_ins.close()
 
-        while dig != 4:
-            if dig == 1:
-                print("\033[1;36mArvore 1:")    
-                estrutura1.visualizar()
-                print("\033[m")
-                print("\033[1;32mArvore 2:")    
-                estrutura2.visualizar()
-                print("\033[m")
-                print("\033[1;33mArvore 3:")    
-                estrutura3.visualizar()
-                print("\033[m")
+            for i in values:
+                dado.append(values[i])
 
-            elif dig == 2:   
-                outf = open("saida1.txt", "w")
-                estrutura1.escrever(outf)
-                outf = open("saida2.txt", "w")
-                estrutura2.escrever(outf)
-                outf = open("saida3.txt", "w")
-                estrutura3.escrever(outf)
-                print("\033[1;33mAs arvores foram escritas com sucesso! Procure-as na raiz do documento!\033[0m")
+            aux2 = Struct.CovidLine(*dado)
 
-            elif dig == 3:
-                escolha = int(input('''\033[1;37mEscolha a arvore que terá o valor excluido
-Arvore:\033[m '''))
+            for i in values:
+                dado.append(i)
 
-                while escolha not in range(1,4):
-                    print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-                    escolha = int(input('''\033[1;37mEscolha a arvore que terá o valor excluido
-Arvore:\033[m '''))
+            estrutura.inserir(aux2)
                 
-                valor = type(arvores[escolha - 1].raiz.chave)(input('''\033[1;37mDigite a chave do valor da Arvore {0} que deseja excluir 
-Valor:\033[m '''.format(escolha)))
-                arvores[escolha - 1].excluir(valor)
+            win.close()
+            janela1()
 
-                print("\033[1;33mValor excluido com sucesso! Visualize a lista para conferir!\033[0m")
-                
-            elif dig == 5:
-                opt = 5
-                break
-            
-            dig = int(input('''\033[1;37mEscolha uma opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da arvore
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
-            while(dig not in range(1, 6)):
-                print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-                dig = int(input('''\033[1;37mEscolha uma opção:
-    1-Visualizar no terminal
-    2-Exportar para um arquivo de texto 
-    3-Excluir um valor da arvore
-    4-Ler novos dados
-    5-Sair do programa
-Opção:\033[m '''))
+        elif (event == 'Remover item'):
+            item = estrutura.excluir()
+            pop_done = sg.popup("Removido um item 1 item da estrutura")       
+            win.close()
+            janela1_tel()
+
+        elif(event == 'Exportar para arquivo de texto'):
+            outf = open("saida.txt", "w")
+            estrutura.escrever(outf)
+            sg.popup('Arquivo criado com sucesso!')
+            win.close()
+            janela1()
+
+        elif (event == 'Voltar'):
+            win.close()
+            Main()
+
+        elif(event == sg.WIN_CLOSED):
+            win.close()
+
+class janela1_tel():
+    def __init__(self):
+        layout = [ [sg.Listbox(estrutura.__str__(), size=(83, 20))], [sg.Button('Voltar')] ]
+
+        win = sg.Window('Dados', layout)
+        event, value = win.read()
+
+        if(event=='Voltar'):
+            win.close()
+            janela1()
+
+class janela_arvore():
+    def __init__(self):
+        layout = [ [sg.Button('Adicionar novo dado'), sg.Button('Remover item')],
+                    [sg.Button('Ver árvore 1'), sg.Button('Ver árvore 2'), sg.Button('Ver árvore 3')],
+                    [sg.Button('Exportar para arquivo de texto')],
+                    [sg.Button('Voltar')] ]
+
+        win = sg.Window('Opções', layout)
+
+        event, value = win.read()
+        if (event == 'Ver árvore 1'):
+            win.close()
+            janela_arvore_tel(1)
+
+        elif (event == 'Ver árvore 2'):
+            win.close()
+            janela_arvore_tel(2)
+
+        elif (event == 'Ver árvore 3'):
+            win.close()
+            janela_arvore_tel(3)
+
+        elif (event == 'Adicionar novo dado'):
+            popup = sg.popup_get_text('Escolha em qual árvore você deseja adicionar:')
+            win.close()
+            janela_arvore_ins(int(popup))
+            janela_arvore()
+
+        elif (event == 'Remover item'):
+            popup = sg.popup_get_text('Escolha em qual árvore você deseja adicionar:')
+            win.close()
+            janela_arvore_rem(int(popup))
+            janela_arvore()
+
+        elif(event == 'Exportar para arquivo de texto'):
+            outf = open("saida.txt", "w")
+            estrutura.escrever(outf)
+            sg.popup('Arquivo criado com sucesso!')
+            win.close()
+            janela_arvore()
+
+        elif (event == 'Voltar'):
+            win.close()
+            Main()
+
+        elif(event == sg.WIN_CLOSED):
+            win.close()
+
+class janela_arvore_ins():
+    def __init__(self, opcao):
+        dado = []
+
+        layout = [ 
+            [sg.Text('Por favor, informe aqui os dados:')],
+            [sg.Text('Chave', size =(30, 1)), sg.InputText()],
+            [sg.Text('Data de Observação', size =(30, 1)), sg.InputText()], 
+            [sg.Text('Estado da Província (Se for na China)', size =(30, 1)), sg.InputText()], 
+            [sg.Text('Região do País', size =(30, 1)), sg.InputText()], 
+            [sg.Text('Última Atualização', size =(30, 1)), sg.InputText()], 
+            [sg.Text('Casos confirmados', size =(30, 1)), sg.InputText()], 
+            [sg.Text('Número de mortos', size =(30, 1)), sg.InputText()], 
+            [sg.Text('Números de recuperados', size =(30, 1)), sg.InputText()],
+            [sg.Submit(), sg.Cancel()]
+        ]
     
-    if opt != 5:
-        opt = int(input('''\033[1;37mEscolha uma opção para como deseja estruturar seus dados:
-    1-Lista Dinâmica
-    2-Pilha
-    3-Fila
-    4-Árvore
-    5-Sair do programa
-Opção:\033[m '''))
-        while(opt not in range(1, 6)):
-            print("\033[1;31mOPÇÃO INVALIDA\033[0m")
-            opt = int(input('''\033[1;37mEscolha uma opção para como deseja estruturar seus dados:
-    1-Lista Dinâmica
-    2-Pilha
-    3-Fila
-    4-Árvore
-    5-Sair do programa
-Opção:\033[m '''))
+        window_ins = sg.Window('Dados', layout)
+        event,values = window_ins.read()
 
-    else:
-        break
+        print(event)
+
+        if (event == 'Cancel'):
+            window_ins.close()
+        else:
+            for i in values:
+                dado.append(values[i])
+                
+            dado[0] = int(dado[0])
+
+            aux2 = Struct.CovidLine(*dado)
+
+            if (opcao == 1):
+                estrutura.inserir(aux2)
+            elif (opcao == 2):
+                estrutura2.inserir(aux2)
+            elif (opcao == 3):
+                estrutura3.inserir(aux2)
+                
+            window_ins.close()
+
+class janela_arvore_rem():
+    def __init__(self, opcao):
+        popup2 = sg.popup_get_text('Digite a chave do nó a ser removido:') 
+
+        if (opcao == 1):
+            if (estrutura.excluir(int(popup2)) == False):
+                pop_error = sg.popup('A chave digitada não existe')
+            else:
+                pop_done = sg.popup('Nó removido com sucesso')
+        elif (opcao == 2):
+            if (estrutura2.excluir(int(popup2)) == False):
+                pop_error = sg.popup('A chave digitada não existe')
+            else:
+                pop_done = sg.popup('Nó removido com sucesso')
+        elif (opcao == 3):
+            if (estrutura3.excluir(int(popup2)) == False):
+                pop_error = sg.popup('A chave digitada não existe')
+            else:
+                pop_done = sg.popup('Nó removido com sucesso')
+
+
+class janela_arvore_tel():
+    def __init__(self, opcao):
+        if opcao == 1:
+            layout = [ [sg.Listbox(estrutura.__str__(), size=(83, 20))], [sg.Button('Voltar')] ]
+        elif opcao == 2:
+            layout = [ [sg.Listbox(estrutura2.__str__(), size=(83, 20))], [sg.Button('Voltar')] ]
+        elif opcao == 3:
+            layout = [ [sg.Listbox(estrutura3.__str__(), size=(83, 20))], [sg.Button('Voltar')] ]
+
+        win = sg.Window('Dados', layout)
+        event, value = win.read()
+
+        if(event=='Voltar'):
+            win.close()
+            janela_arvore()
+
+class janela_grafo():
+    def __init__(self):
+        layout = [ [sg.Button('Ver dados')],
+                    [sg.Button('Ver a menor distancia')],
+                    [sg.Button('Voltar')] ]
+
+        win = sg.Window('Opções', layout)
+
+        event, value = win.read()
+        if (event == 'Ver dados'):
+            win.close()
+            janela_grafo_tel()
+
+        elif(event == 'Ver a menor distancia'):
+            aux1 = sg.popup_get_text('Digite o nome do primeiro personagem, em letras maiúsculas', title='Primeiro personagem').upper()
+            while (aux1 == None):
+                aux1 = sg.popup_get_text('Digite o nome do primeiro personagem', title='Primeiro personagem').upper()
+
+            aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem').upper()
+            while (aux2 == None):
+                aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem').upper()
+            if aux2 == "QUALQUER":
+                dis, traj = estrutura.menor_dist(aux1)
+            else:
+                dis, traj = estrutura.menor_dist(aux1, aux2)
+
+            if (dis == -1):
+                mes = sg.popup(traj)
+            else:
+                pop = sg.popup(traj, title='Busca')
+            
+            win.close()
+            janela_grafo()
+
+        elif (event == 'Voltar'):
+            win.close()
+            Main()
+
+        elif(event == sg.WIN_CLOSED):
+            win.close()
+
+class janela_grafo_tel():
+    def __init__(self):
+        layout = [ [sg.Listbox(estrutura.__str__(), size=(180, 20))], [sg.Button('Voltar')] ]
+
+        win = sg.Window('Dados', layout)
+        event, value = win.read()
+
+        if(event=='Voltar'):
+            win.close()
+            janela_grafo()
+        elif (event == sg.WIN_CLOSED):
+            win.close()
+
+app = Main()

@@ -2,9 +2,6 @@ import Grafo
 import random
 import Struct
 
-L = 10
-rrr = list(range(L))
-random.shuffle(rrr)
 ggg = Grafo.Grafo()
 for node in Struct.starwars["nodes"]:
     ggg.add_vertice(node)
@@ -15,7 +12,7 @@ for link in Struct.starwars["links"]:
 
 print(ggg)
 
-for i in range(100):
+'''for i in range(100):
     nome1 = ggg.vertice[random.randint(0, ggg.total_vertices-1)]
     nome2 = ggg.vertice[random.randint(0, ggg.total_vertices-1)]
     ggg.menor_dist(nome1.nome, nome2.nome)
@@ -26,7 +23,9 @@ for i in range(ggg.total_vertices):
     if d > d_max:
         j = i
         d_max = d
-ggg.menor_dist("PLO KOON")
+'''
+#ggg.menor_dist("PLO KOON")
+#ggg.menor_dist("PLO KOON", "R2-D2")
 #A personagem R2-D2 não está conectado com GOLD FIVE
 #A personagem ADMIRAL ACKBAR conecta com ele mesmo
 #A personagem GOLD FIVE não está conectado com ORN FREE TAA

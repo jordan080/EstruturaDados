@@ -51,18 +51,19 @@ class Grafo:
         return True
 
     def __str__(self):
-        print("Vértices: {0}, Arestas: {1}\n".format(self.total_vertices, self.arestas))
+        #print("Vértices: {0}, Arestas: {1}\n".format(self.total_vertices, self.arestas))
         i = 0
-        s = ""
+        ss = []
         for vertice in self.vertice:
-            s += vertice.nome + ": "
+            s = vertice.nome + "= "
             adj = vertice.head
             while adj:
                 s += "{0}({1:.2f}) ".format(self.vertice[adj.vertice].nome, adj.peso)
                 adj = adj.next
-            s += "\n"
+            s += "\n\n"
+            ss.append(s)
             i += 1
-        return s
+        return ss
 
     def djikstra(self, vi, vf=-1):
         d = []
@@ -100,32 +101,33 @@ class Grafo:
             vf = -1
         else:
             if nome_vf not in self.dic_vec:
-                print(nome_vf + " nao existe no Grafo.")
-                return -1
+                s = nome_vf + " nao existe no Grafo."
+                return -1, s
             vf = self.dic_vec[nome_vf]
         if nome_vi not in self.dic_vec:
-            print(nome_vi + " nao existe no Grafo.")
-            return -1
+            s = nome_vi + " nao existe no Grafo."
+            return -1, s
         vi = self.dic_vec[nome_vi]
         if nome_vf == nome_vi:
-            print(str(self.vertice[self.dic_vec[nome_vi]]) + " conecta com ele mesmo")
+            s = nome_vi + " conecta com ele mesmo"
+            return -1, s
         d, p, u = self.djikstra(vi, vf)
+        ss = ""
         if nome_vf:
             if vf != u or p[u] == -1:
-                print("A personagem" + str(self.vertice[self.dic_vec[nome_vi]]) + " não está conectado com " +
-                      str(self.vertice[self.dic_vec[nome_vf]]))
-                return -1
+                s = "A personagem" + nome_vi + " não está conectado com " + nome_vf
+                return -1, s
         else:
             if vi == u:
-                print("A personagem " + str(self.vertice[vi]) + " não se conecta com ninguém")
-                return -1
-            print("A personagem mais distante de " + str(self.vertice[vi]) + " é " + str(self.vertice[u]) + ":")
+                s = "A personagem " + nome_vi + " não se conecta com ninguém"
+                return -1, s
+            ss = "A personagem mais distante de " + nome_vi + " é " + self.vertice[u].nome + ":\n"
             vf = u
-        print("A distância entre " + str(self.vertice[vi]) + " e " + str(self.vertice[u]) + " é " + str(d[vf]) + ":")
         s = ""
         while p[u] != -1:
-            s = " -> " + str(self.vertice[u]) + "({0:.2f})".format(d[u]) + s
+            s = " -> " + self.vertice[u].nome + "({0:.2f})".format(d[u]) + s
             u = p[u]
-        s = str(self.vertice[self.dic_vec[nome_vi]]) + s
-        print(s)
-        return d[vf]
+        s = self.vertice[self.dic_vec[nome_vi]].nome + s
+        s = ss + "A distância entre " + self.vertice[vi].nome + " e " + self.vertice[u].nome + " é " + str(round(d[vf], 2)) + ":\n" + s
+        #print(s)
+        return d[vf], s

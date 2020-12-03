@@ -37,6 +37,13 @@ class CovidLineElement:
                                                                       self.covid_line.deaths,
                                                                       self.covid_line.recovered)
 
+    def auxstr(self, s):
+        if self.left:
+            self.left.auxstr(s)
+        s.append(self.__str__())
+        if self.right:
+            self.right.auxstr(s)
+
     def visualizar(self):
         #função que imprime no terminal, percorrendo nós recursivamente
         if self.left:
@@ -111,6 +118,13 @@ class CoviList:
             return
         self.raiz.visualizar()
 
+    def __str__(self):
+        if not self.raiz:
+            return
+        s = []
+        self.raiz.auxstr(s)
+        return s
+
     def buscar(self, ch):
         #metodo que chama a função de buscar um certo nó
         if not self.raiz:
@@ -133,11 +147,11 @@ class CoviList:
 
         #verfica que não é a raiz e busca pela posição onde está o nó que se deseja apagar e o seu pai
         if not self.raiz:
-            return
+            return False
         no, pai = self.raiz.busca_pai(ch)
         #se o no não existe, retorna
         if not no:
-            return
+            return False
         #se o nó só tiver um filho, verifica se ele está na direita ou na esquerda e o atribui em q 
         if not no.left or not no.right:
             if not no.left:
@@ -168,6 +182,7 @@ class CoviList:
             self.raiz = q
         #o nó é apagado
         del no
+        return True
 
     def apagarEstrutura(self):
         #apaga a arvore, apagando todos os nós recursivamente e depois fazendo a raiz ter valor nulo
