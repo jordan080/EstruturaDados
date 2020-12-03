@@ -128,6 +128,6 @@ class Grafo:
             s = " -> " + self.vertice[u].nome + "({0:.2f})".format(d[u]) + s
             u = p[u]
         s = self.vertice[self.dic_vec[nome_vi]].nome + s
-        s = ss + "A distância entre " + self.vertice[vi].nome + " e " + self.vertice[u].nome + " é " + str(round(d[vf], 2)) + ":\n" + s
+        s = ss + "A distância entre " + self.vertice[vi].nome + " e " + self.vertice[vf].nome + " é " + str(round(d[vf], 2)) + ":\n" + s
         #print(s)
         return d[vf], s
