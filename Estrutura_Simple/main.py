@@ -71,10 +71,10 @@ class Main():
 7-Número de recuperados
             '''
             for i in range(3):
-                aux2 = sg.popup_get_text(message=texto, title='Digite uma chave:')
+                aux2 = sg.popup_get_text(message=texto, title="Digite uma chave da árvore {0}:".format(i+1))
 
                 while (aux2 == None or aux2.isnumeric() == False or not(int(aux2) in range(8)) ):
-                    aux2 = sg.popup_get_text(message=texto, title='Digite uma chave:')
+                    aux2 = sg.popup_get_text(message=texto, title="Digite uma chave da árvore {0}:".format(i+1))
                 
                 if (i == 0):
                     estrutura = Arvore.CoviList(int(aux2))
@@ -125,6 +125,7 @@ class janela_lista():
         win = sg.Window('Opções', layout)
 
         event, value = win.read()
+        print(event)
         if (event == 'Ver dados'):
             win.close()
             janela_lista_tel()
@@ -134,41 +135,43 @@ class janela_lista():
 
             if (pop == None):
                 win.close()
-            elif (estrutura.buscar(int(pop)) == int(pop)):
-                pop_error = sg.popup("A chave digitada já existe")          
             else:
-                dado = []
-                dado.append(int(pop))
+                at, prev = estrutura.buscar(int(pop))
+                if at:
+                    pop_error = sg.popup("A chave digitada já existe")
+                else:
+                    dado = []
+                    dado.append(int(pop))
 
-                layout = [ 
-                    [sg.Text('Por favor, informe aqui os dados:')], 
-                    [sg.Text('Data de Observação', size =(30, 1)), sg.InputText()], 
-                    [sg.Text('Estado da Província (Se for na China)', size =(30, 1)), sg.InputText()], 
-                    [sg.Text('Região do País', size =(30, 1)), sg.InputText()], 
-                    [sg.Text('Última Atualização', size =(30, 1)), sg.InputText()], 
-                    [sg.Text('Casos confirmados', size =(30, 1)), sg.InputText()], 
-                    [sg.Text('Número de mortos', size =(30, 1)), sg.InputText()], 
-                    [sg.Text('Números de recuperados', size =(30, 1)), sg.InputText()],
-                    [sg.Submit(), sg.Cancel()]
-                ]
+                    layout = [
+                        [sg.Text('Por favor, informe aqui os dados:')],
+                        [sg.Text('Data de Observação', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Estado da Província (Se for na China)', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Região do País', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Última Atualização', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Casos confirmados', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Número de mortos', size =(30, 1)), sg.InputText()],
+                        [sg.Text('Números de recuperados', size =(30, 1)), sg.InputText()],
+                        [sg.Submit(), sg.Cancel()]
+                    ]
 
-                window_ins = sg.Window('Dados', layout)
-                event,values = window_ins.read()
-
-                if (event == 'Cancel'):
+                    window_ins = sg.Window('Dados', layout)
+                    event,values = window_ins.read()
                     window_ins.close()
 
-                window_ins.close()
+                    if (event == 'Cancel'):
+                        win.close()
+                        janela_lista()
 
-                for i in values:
-                    dado.append(values[i])
+                    for i in values:
+                        dado.append(values[i])
 
-                aux = Struct.CovidLine(*dado)
+                    aux2 = Struct.CovidLine(*dado)
 
-                for i in values:
-                    dado.append(i)
+                    for i in values:
+                        dado.append(i)
 
-                estrutura.inserir(aux)
+                    estrutura.inserir(aux2)
                 
             win.close()
             janela_lista()
@@ -248,12 +251,12 @@ class janela1():
             for i in values:
                 dado.append(values[i])
 
-            aux = Struct.CovidLine(*dado)
+            aux2 = Struct.CovidLine(*dado)
 
             for i in values:
                 dado.append(i)
 
-            estrutura.inserir(aux)
+            estrutura.inserir(aux2)
                 
             win.close()
             janela1()
@@ -327,6 +330,7 @@ class janela_arvore():
             outf = open("saida.txt", "w")
             estrutura.escrever(outf)
             sg.popup('Arquivo criado com sucesso!')
+            win.close()
             janela_arvore()
 
         elif (event == 'Voltar'):
@@ -366,14 +370,14 @@ class janela_arvore_ins():
                 
             dado[0] = int(dado[0])
 
-            aux = Struct.CovidLine(*dado)
+            aux2 = Struct.CovidLine(*dado)
 
             if (opcao == 1):
-                estrutura.inserir(aux)
+                estrutura.inserir(aux2)
             elif (opcao == 2):
-                estrutura2.inserir(aux)
+                estrutura2.inserir(aux2)
             elif (opcao == 3):
-                estrutura3.inserir(aux)
+                estrutura3.inserir(aux2)
                 
             window_ins.close()
 
@@ -435,13 +439,15 @@ class janela_grafo():
             aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem').upper()
             while (aux2 == None):
                 aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem').upper()
-
-            dis, traj = estrutura.menor_dist(aux1, aux2)
+            if aux2 == "QUALQUER":
+                dis, traj = estrutura.menor_dist(aux1)
+            else:
+                dis, traj = estrutura.menor_dist(aux1, aux2)
 
             if (dis == -1):
-                mes = sg.popup("O ou os personagens não existem no grafo, tente novamente")
+                mes = sg.popup(traj)
             else:
-                pop = sg.popup("A distância entre " + aux1 + " e " + aux2 + " é " + str(round(dis, 2)), traj, title='Busca')
+                pop = sg.popup(traj, title='Busca')
             
             win.close()
             janela_grafo()
@@ -463,5 +469,7 @@ class janela_grafo_tel():
         if(event=='Voltar'):
             win.close()
             janela_grafo()
+        elif (event == sg.WIN_CLOSED):
+            win.close()
 
 app = Main()
