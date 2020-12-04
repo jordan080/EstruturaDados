@@ -35,7 +35,7 @@ class Grafo:
         self.dic_vec[dado["name"]] = self.total_vertices
         self.total_vertices += 1
 
-    def add_aresta(self, i, j, peso):
+    def add_aresta(self, i, j, peso): # i = source; j = target
         if (i < 0) or (j < 0) or (j >= self.total_vertices) or (i >= self.total_vertices):
             return False
         novo = self.vertice[i].head
@@ -55,14 +55,14 @@ class Grafo:
         i = 0
         ss = []
         for vertice in self.vertice:
-            s = vertice.nome + "= "
+            ss.append(vertice.nome + ": ")
             adj = vertice.head
             while adj:
-                s += "{0}({1:.2f}) ".format(self.vertice[adj.vertice].nome, adj.peso)
+                ss.append("        •  {0}({1:.2f})".format(self.vertice[adj.vertice].nome, adj.peso))
                 adj = adj.next
-            s += "\n\n"
-            ss.append(s)
             i += 1
+
+            ss.append("")
         return ss
 
     def djikstra(self, vi, vf=-1):
@@ -100,7 +100,7 @@ class Grafo:
         if not nome_vf:
             vf = -1
         else:
-            if nome_vf not in self.dic_vec:
+            if nome_vf not in self.dic_vec: #nomes
                 s = nome_vf + " nao existe no Grafo."
                 return -1, s
             vf = self.dic_vec[nome_vf]
