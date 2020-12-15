@@ -432,17 +432,17 @@ class janela_grafo():
             janela_grafo_tel()
 
         elif(event == 'Ver a menor distancia'):
-            aux1 = sg.popup_get_text('Digite o nome do primeiro personagem, em letras maiúsculas', title='Primeiro personagem').upper()
+            aux1 = sg.popup_get_text('Digite o nome do primeiro personagem, em letras maiúsculas', title='Primeiro personagem')
             while (aux1 == None):
-                aux1 = sg.popup_get_text('Digite o nome do primeiro personagem', title='Primeiro personagem').upper()
+                aux1 = sg.popup_get_text('Digite o nome do primeiro personagem', title='Primeiro personagem')
 
-            aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem').upper()
+            aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem')
             while (aux2 == None):
-                aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem').upper()
+                aux2 = sg.popup_get_text('Digite o nome do segundo personagem', title='Segundo personagem')
             if aux2 == "QUALQUER":
-                dis, traj = estrutura.menor_dist(aux1)
+                dis, traj = estrutura.menor_dist(aux1.upper())
             else:
-                dis, traj = estrutura.menor_dist(aux1, aux2)
+                dis, traj = estrutura.menor_dist(aux1.upper(), aux2.upper())
 
             if (dis == -1):
                 mes = sg.popup(traj)
